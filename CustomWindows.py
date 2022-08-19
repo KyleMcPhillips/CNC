@@ -36,7 +36,8 @@ def create_window(layout, window_name, borderless=False, justification='l'):
             [sg.Text('CW/CCW:'),
              sg.Combo(['CW', 'CCW'], default_value='CW', readonly=True, key='-CLOCK-', size=(5, 1),
                       enable_events=True)],  # Line 5
-            [sg.Button('Ok'), sg.Button('Cancel')]  # Line 6
+            [sg.Text('Invalid Input', key='-INVALID-', text_color='red', visible=False), sg.Button('Ok'),
+             sg.Button('Cancel')]  # Line 6
         ]
     elif layout == 'poly_layout':
         layout = [

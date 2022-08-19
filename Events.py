@@ -20,7 +20,7 @@ def getName():
 
 
 def create_mill(x1, y1, x2, y2,):
-    CNCPlot.add_event(x1, x2, y1, y2)
+    CNCPlot.add_event('Mill', x1, x2, y1, y2)
 
 
 def create_arc(x1, y1, x2, y2, center_x, center_y, clock):
@@ -35,8 +35,8 @@ def create_arc(x1, y1, x2, y2, center_x, center_y, clock):
 
     angle1 = math.degrees(math.atan2(center_y-y1, center_x-x1))
     angle2 = math.degrees(math.atan2(center_y-y2, center_x-x2))
-    print(f"Angle of center of circle to 1st coordinate: {angle1}")
-    print(f"Angle of center of circle to 2nd coordinate: {angle2}")
+    #print(f"Angle of center of circle to 1st coordinate: {angle1}")
+    #print(f"Angle of center of circle to 2nd coordinate: {angle2}")
     if angle1 == angle2:
         angle2 = angle1 - 360
     # Confirm that entered points create valid circle
@@ -44,7 +44,7 @@ def create_arc(x1, y1, x2, y2, center_x, center_y, clock):
     radius2 = math.hypot(center_x-x2, center_y-y2)
     if radius != radius2:
         raise EventException("Invalid Points")
-    print(f"Radius: {radius}")
+    #print(f"Radius: {radius}")
 
     # Get direction of cut, and determine path
     # clock = input("Clockwise/Counterclockwise? (CC/CCW): ")
@@ -57,7 +57,7 @@ def create_arc(x1, y1, x2, y2, center_x, center_y, clock):
     else:
         raise EventException("Invalid Input, please enter 'CC' or 'CCW'")
 
-    CNCPlot.add_event(wedge)
+    CNCPlot.add_event('Arc', x1, x2, y1, y2, center_x, center_y, clock)
 
 
 # def create_poly():

@@ -54,9 +54,13 @@ def main():
                 elif event == '-X1-' and values['-X1-'] and values['-X1-'][-1] not in '-0123456789.':
                     arc_window['-X1-'].update(values['-X1-'][:-1])
                 elif event == 'Ok':
-                    Events.create_arc(float(values['-X1-']), float(values['-Y1-']), float(values['-X2-']),
-                                      float(values['-Y2-']), float(values['-CENTER_X-']),
-                                      float(values['-CENTER_Y-']), values['-CLOCK-'])
+                    try:
+                        Events.create_arc(float(values['-X1-']), float(values['-Y1-']), float(values['-X2-']),
+                                          float(values['-Y2-']), float(values['-CENTER_X-']),
+                                          float(values['-CENTER_Y-']), values['-CLOCK-'])
+                    except Events.EventException:
+                        arc_window['-INVALID-'].update(visible=True)
+                        continue
                     # ax.add_patch(arc)
                     arc_window.close()
                     arc_active = False
