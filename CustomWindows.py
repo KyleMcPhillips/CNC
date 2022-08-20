@@ -44,16 +44,18 @@ def create_window(layout, window_name, borderless=False, justification='l'):
         layout = [
             [sg.Text('New Polygon')],
             [sg.Text('FRM/PKT:'),
-             sg.Combo(['FRM', 'PKT'], default_value='FRM', readonly=True, size=(5, 1), key='-CUT_TYPE-',
+             sg.Combo(['PKT', 'FRM'], default_value='PKT', readonly=True, size=(5, 1), key='-CUT_TYPE-',
                       enable_events=True),
              sg.Text('Number of Sides:'),
              sg.Slider(range=(0, 20), key='-NUM_SIDES-', size=(15, 15), orientation='h', enable_events=True)]]
         for x in range(1, 31):
             layout.append([sg.Text(f'X{x}:', key=f'X{x}:', visible=False),
-                           sg.Input(key=f'-X{x}-', size=(10, 1), enable_events=True, visible=False),
+                           sg.Input(key=f'-X{x}-', size=(10, 1), enable_events=True, default_text='0.0', visible=False),
                            sg.Text(f'Y{x}:', key=f'Y{x}:', visible=False),
-                           sg.Input(key=f'-Y{x}-', size=(10, 1), enable_events=True, visible=False)])
-        layout.append([sg.Button('Ok'), sg.Button('Cancel')])
+                           sg.Input(key=f'-Y{x}-', size=(10, 1), enable_events=True, default_text='0.0', visible=False)]
+                          )
+        layout.append([sg.Text('Invalid Input', key='-INVALID-', text_color='red', visible=False), sg.Button('Ok'),
+                       sg.Button('Cancel')])
     return sg.Window(window_name, layout, no_titlebar=borderless, element_justification=justification)
 
 # , location=(20, 20)

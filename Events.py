@@ -28,16 +28,19 @@ def create_arc(x1, y1, x2, y2, center_x, center_y, clock):
     if radius != radius2:
         raise EventException("Invalid Points")
 
-    if clock == 'CW':
-        wedge = Wedge((center_x, center_y), radius, angle2 + 180, angle1 + 180, color=np.random.rand(3), width=0.01,
-                      fill=False, label=getName())
-    elif clock == 'CCW':
-        wedge = Wedge((center_x, center_y), radius, angle1 + 180, angle2 + 180, color=np.random.rand(3), width=0.01,
-                      fill=False, label=getName())
-    else:
-        raise EventException("Invalid Input, please enter 'CC' or 'CCW'")
-
     CNCPlot.add_event('Arc', x1, y1, x2, y2, center_x, center_y, clock)
 
 
-# def create_poly():
+def create_poly(poly_type, num_sides, coords):
+    lines = []
+    if poly_type == 'PKT':
+        for x in range(0, len(coords)-1):
+            lines.append([coords[x][0], coords[x][1], coords[x+1][0], coords[x+1][1]])
+        lines.append([coords[len(coords)-1][0], coords[len(coords)-1][1], coords[0][0], coords[0][1]])
+        print(lines)
+    elif poly_type == 'FRM':
+        for x in range(0, len(coords) - 1):
+            lines.append([coords[x][0], coords[x][1], coords[x + 1][0], coords[x + 1][1]])
+        print(lines)
+
+    CNCPlot.add_event('Poly', lines, poly_type)

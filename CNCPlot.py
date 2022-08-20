@@ -61,6 +61,12 @@ def create_plot():
             else:
                 raise Events.EventException
             ax.add_patch(wedge)
+        elif event[0] == 'Poly':
+            for x in range(0, len(event[1][0])):
+                print(event[1][0][x][0], event[1][0][x][1]), (event[1][0][x][2], event[1][0][x][3])
+                plt.plot((event[1][0][x][0], event[1][0][x][2]), (event[1][0][x][1], event[1][0][x][3]), linewidth=1,
+                         color=(0.1, 0.1, event[2][0]),
+                         label=key)
 
     plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
     with mpl.rc_context(rc={'interactive': False}):
