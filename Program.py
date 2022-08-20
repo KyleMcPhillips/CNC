@@ -25,6 +25,8 @@ def main():
         # ----- EVENT: Close window or hit Cancel button -----
         if event == sg.WIN_CLOSED or event == 'Cancel':  # if user closes window or clicks cancel
             break
+        elif event == 'Undo':
+            CNCPlot.undo()
         # ----- EVENT: Hit Restart button -----
         elif event == 'Restart':
             os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
@@ -38,8 +40,12 @@ def main():
                     mill_window.close()
                     mill_active = False
                 elif event == 'Ok':
-                    Events.create_mill(float(values['-X1-']), float(values['-Y1-']), float(values['-X2-']),
-                                       float(values['-Y2-']))
+                    try:
+                        Events.create_mill(float(values['-X1-']), float(values['-Y1-']), float(values['-X2-']),
+                                           float(values['-Y2-']))
+                    except ValueError:
+                        mill_window['-INVALID-'].update(visible=True)
+                        continue
                     mill_window.close()
                     mill_active = False
         # ======================================================================================================= Arc ==
@@ -61,6 +67,9 @@ def main():
                     except Events.EventException:
                         arc_window['-INVALID-'].update(visible=True)
                         continue
+                    except ValueError:
+                        arc_window['-INVALID-'].update(visible=True)
+                        continue
                     # ax.add_patch(arc)
                     arc_window.close()
                     arc_active = False
@@ -70,6 +79,10 @@ def main():
             poly_active = True
             while poly_active:
                 event, values = poly_window.read()
+                if values['-CUT_TYPE-'] == 'FRM':
+                    y = 2
+                else:
+                    y = 1
                 if event == sg.WIN_CLOSED or event == 'Cancel':
                     poly_window.close()
                     poly_active = False
@@ -96,12 +109,18 @@ def main():
                         poly_window[f'-X{x}-'].update(visible=False)
                         poly_window[f'Y{x}:'].update(visible=False)
                         poly_window[f'-Y{x}-'].update(visible=False)
-                #elif event == 'Ok':
-                #    mill = Events.create_mill(float(values['-X1-']), float(values['-Y1-']),
-                #                              float(values['-X2-']),
-                #                              float(values['-Y2-']))
-                #    poly_window.close()
-                #    poly_active = False
+                elif event == 'Ok':
+                    coords = []
+                    try:
+                        for x in range(1, int(values['-NUM_SIDES-'])+y):
+                            print([float(values[f'-X{x}-']), float(values[f'-Y{x}-'])])
+                            coords.append([float(values[f'-X{x}-']), float(values[f'-Y{x}-'])])
+                        Events.create_poly(values['-CUT_TYPE-'], int(values['-NUM_SIDES-']), coords)
+                    except Events.EventException:
+                        poly_window['-INVALID-'].update(visible=True)
+                        continue
+                    poly_window.close()
+                    poly_active = False
     starting_window.close()
 
 

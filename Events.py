@@ -6,17 +6,9 @@ import numpy as np
 import pandas as pd
 import CNCPlot
 
-eventNum = 0
-
 
 class EventException(Exception):
     pass
-
-
-def getName():
-    global eventNum
-    eventNum += 1
-    return f"Event{eventNum}"
 
 
 def create_mill(x1, y1, x2, y2,):
@@ -25,39 +17,30 @@ def create_mill(x1, y1, x2, y2,):
 
 def create_arc(x1, y1, x2, y2, center_x, center_y, clock):
 
-    # Get starting points
-    # x1 = int(input("X1: "))
-    # y1 = int(input("Y1: "))
-    # x2 = int(input("X2: "))
-    # y2 = int(input("Y2: "))
-    # center_x = int(input("Center of Circle X: "))
-    # center_y = int(input("Center of Circle Y: "))
-
     angle1 = math.degrees(math.atan2(center_y-y1, center_x-x1))
     angle2 = math.degrees(math.atan2(center_y-y2, center_x-x2))
-    #print(f"Angle of center of circle to 1st coordinate: {angle1}")
-    #print(f"Angle of center of circle to 2nd coordinate: {angle2}")
     if angle1 == angle2:
         angle2 = angle1 - 360
+
     # Confirm that entered points create valid circle
     radius = math.hypot(center_x-x1, center_y-y1)
     radius2 = math.hypot(center_x-x2, center_y-y2)
     if radius != radius2:
         raise EventException("Invalid Points")
-    #print(f"Radius: {radius}")
 
-    # Get direction of cut, and determine path
-    # clock = input("Clockwise/Counterclockwise? (CC/CCW): ")
-    if clock == 'CW':
-        wedge = Wedge((center_x, center_y), radius, angle2 + 180, angle1 + 180, color=np.random.rand(3), width=0.01,
-                      fill=False, label=getName())
-    elif clock == 'CCW':
-        wedge = Wedge((center_x, center_y), radius, angle1 + 180, angle2 + 180, color=np.random.rand(3), width=0.01,
-                      fill=False, label=getName())
-    else:
-        raise EventException("Invalid Input, please enter 'CC' or 'CCW'")
-
-    CNCPlot.add_event('Arc', x1, x2, y1, y2, center_x, center_y, clock)
+    CNCPlot.add_event('Arc', x1, y1, x2, y2, center_x, center_y, clock)
 
 
-# def create_poly():
+def create_poly(poly_type, num_sides, coords):
+    lines = []
+    if poly_type == 'PKT':
+        for x in range(0, len(coords)-1):
+            lines.append([coords[x][0], coords[x][1], coords[x+1][0], coords[x+1][1]])
+        lines.append([coords[len(coords)-1][0], coords[len(coords)-1][1], coords[0][0], coords[0][1]])
+        print(lines)
+    elif poly_type == 'FRM':
+        for x in range(0, len(coords) - 1):
+            lines.append([coords[x][0], coords[x][1], coords[x + 1][0], coords[x + 1][1]])
+        print(lines)
+
+    CNCPlot.add_event('Poly', lines, poly_type)
