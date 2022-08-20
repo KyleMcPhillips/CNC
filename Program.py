@@ -25,6 +25,8 @@ def main():
         # ----- EVENT: Close window or hit Cancel button -----
         if event == sg.WIN_CLOSED or event == 'Cancel':  # if user closes window or clicks cancel
             break
+        elif event == 'Undo':
+            CNCPlot.undo()
         # ----- EVENT: Hit Restart button -----
         elif event == 'Restart':
             os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
@@ -38,8 +40,12 @@ def main():
                     mill_window.close()
                     mill_active = False
                 elif event == 'Ok':
-                    Events.create_mill(float(values['-X1-']), float(values['-Y1-']), float(values['-X2-']),
-                                       float(values['-Y2-']))
+                    try:
+                        Events.create_mill(float(values['-X1-']), float(values['-Y1-']), float(values['-X2-']),
+                                           float(values['-Y2-']))
+                    except ValueError:
+                        mill_window['-INVALID-'].update(visible=True)
+                        continue
                     mill_window.close()
                     mill_active = False
         # ======================================================================================================= Arc ==
@@ -59,6 +65,9 @@ def main():
                                           float(values['-Y2-']), float(values['-CENTER_X-']),
                                           float(values['-CENTER_Y-']), values['-CLOCK-'])
                     except Events.EventException:
+                        arc_window['-INVALID-'].update(visible=True)
+                        continue
+                    except ValueError:
                         arc_window['-INVALID-'].update(visible=True)
                         continue
                     # ax.add_patch(arc)

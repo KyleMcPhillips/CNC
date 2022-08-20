@@ -29,10 +29,15 @@ def create_plot():
     ax.grid(True, which='both')
     ax.axhline(y=0, color='k')
     ax.axvline(x=0, color='k')
-    fig.patch.set_facecolor('xkcd:slate grey')
-    ax.set_facecolor('xkcd:grey')
+    fig.patch.set_facecolor('xkcd:grey')
+    ax.set_facecolor('xkcd:light grey')
 
     print(CNC_PLOT)
+
+    # KEY
+    # event[0] is the event type
+    # event[1][#] contains the event variables
+    # event[2][0] contains a random decimal between 0-1 for color
 
     for key, event in CNC_PLOT.items():
         print(key)
@@ -47,8 +52,15 @@ def create_plot():
                 angle2 -= 360
             radius = math.hypot(event[1][4] - event[1][0], event[1][5] - event[1][1])
             radius2 = math.hypot(event[1][4] - event[1][2], event[1][5] - event[1][3])
-            #if
-            #ax.
+            if event[1][6] == 'CW':
+                wedge = Wedge((event[1][4], event[1][5]), radius, angle2 + 180, angle1 + 180,
+                              color=(event[2][0], 0.1, 0.1), width=0.01, fill=False, label=key)
+            elif event[1][6] == 'CCW':
+                wedge = Wedge((event[1][4], event[1][5]), radius, angle1 + 180, angle2 + 180,
+                              color=(event[2][0], 0.1, 0.1), width=0.01, fill=False, label=key)
+            else:
+                raise Events.EventException
+            ax.add_patch(wedge)
 
     plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
     with mpl.rc_context(rc={'interactive': False}):
@@ -62,3 +74,6 @@ def add_event(event_type, *args):
     CNC_PLOT.update({f'Event {i}': [event_type, args, np.random.rand(1)]})
     i += 1
 
+
+def undo():
+    CNC_PLOT.popitem()

@@ -10,29 +10,30 @@ def create_window(layout, window_name, borderless=False, justification='l'):
     if layout == 'starting_layout':
         layout = [
             [sg.Text('SELECT EVENT', font=title_font), sg.Push(),
-             sg.Button('Restart', button_color=('red', 'black'), font=button_font)],  # Line 1
+             sg.Button('Restart', button_color=('red', 'black'), font=button_font)],
             [sg.Button('Add Mill', font=button_font), sg.Button('Add Arc', font=button_font),
              sg.Button('Add Polygon', font=button_font), sg.Button('Undo', font=button_font), sg.Push(),
-             sg.Button('Cancel', font=button_font, button_color=('black', 'grey'))]  # Line 3
+             sg.Button('Cancel', font=button_font, button_color=('black', 'grey'))]
         ]
     elif layout == 'mill_layout':
         layout = [
-            [sg.Text('New Mill')],  # Line 1
+            [sg.Text('New Mill')],
             [sg.Text('X1:'), sg.Input(key='-X1-', default_text='0.0', size=(10, 1), enable_events=True),
-             sg.Text('Y1:'), sg.Input(key='-Y1-', default_text='0.0', size=(10, 1), enable_events=True)],  # Line 2
+             sg.Text('Y1:'), sg.Input(key='-Y1-', default_text='0.0', size=(10, 1), enable_events=True)],
             [sg.Text('X2:'), sg.Input(key='-X2-', default_text='0.0', size=(10, 1), enable_events=True),
-             sg.Text('Y2:'), sg.Input(key='-Y2-', default_text='0.0', size=(10, 1), enable_events=True)],  # Line 3
-            [sg.Button('Ok'), sg.Button('Cancel')]  # Line 4
+             sg.Text('Y2:'), sg.Input(key='-Y2-', default_text='0.0', size=(10, 1), enable_events=True)],
+            [sg.Text('Invalid Input', key='-INVALID-', text_color='red', visible=False), sg.Button('Ok'),
+             sg.Button('Cancel')]  # Line 4
         ]
     elif layout == 'arc_layout':
         layout = [
             [sg.Text('New Arc')],  # Line 1
             [sg.Text('X1:'), sg.Input(key='-X1-', default_text='0.0', size=(10, 1), enable_events=True),
-             sg.Text('Y1:'), sg.Input(key='-Y1-', default_text='0.0', size=(10, 1), enable_events=True)],  # Line 2
+             sg.Text('Y1:'), sg.Input(key='-Y1-', default_text='0.0', size=(10, 1), enable_events=True)],
             [sg.Text('X2:'), sg.Input(key='-X2-', default_text='0.0', size=(10, 1), enable_events=True),
-             sg.Text('Y2:'), sg.Input(key='-Y2-', default_text='0.0', size=(10, 1), enable_events=True)],  # Line 3
+             sg.Text('Y2:'), sg.Input(key='-Y2-', default_text='0.0', size=(10, 1), enable_events=True)],
             [sg.Text('CenterX:'), sg.Input(key='-CENTER_X-', default_text='0.0', size=(10, 1), enable_events=True),
-             sg.Text('CenterY:'), sg.Input(key='-CENTER_Y-', default_text='0.0', size=(10, 1), enable_events=True)],  # Line 4
+             sg.Text('CenterY:'), sg.Input(key='-CENTER_Y-', default_text='0.0', size=(10, 1), enable_events=True)],
             [sg.Text('CW/CCW:'),
              sg.Combo(['CW', 'CCW'], default_value='CW', readonly=True, key='-CLOCK-', size=(5, 1),
                       enable_events=True)],  # Line 5
@@ -41,7 +42,7 @@ def create_window(layout, window_name, borderless=False, justification='l'):
         ]
     elif layout == 'poly_layout':
         layout = [
-            [sg.Text('New Polygon')],  # Line 1
+            [sg.Text('New Polygon')],
             [sg.Text('FRM/PKT:'),
              sg.Combo(['FRM', 'PKT'], default_value='FRM', readonly=True, size=(5, 1), key='-CUT_TYPE-',
                       enable_events=True),
@@ -55,5 +56,4 @@ def create_window(layout, window_name, borderless=False, justification='l'):
         layout.append([sg.Button('Ok'), sg.Button('Cancel')])
     return sg.Window(window_name, layout, no_titlebar=borderless, element_justification=justification)
 
-# , sg.Text('Name:'), sg.InputText(key='-MILL_NAME-', size=(20, 1))
-# , sg.Text('Name:'), sg.InputText(key='-ARC_NAME-', size=(20, 1))
+# , location=(20, 20)
