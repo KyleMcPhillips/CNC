@@ -77,7 +77,7 @@ def create_plot():
 def add_event(event_type, *args):
     global CNC_PLOT
     global i
-    CNC_PLOT.update({f'Event {i}': [event_type, args, np.random.rand(1)]})
+    CNC_PLOT.update({f'Event {i}': [event_type, args, 0.5*np.random.rand(1)+0.5]})
     i += 1
 
 
